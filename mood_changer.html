@@ -1,0 +1,71 @@
+<HTML>
+ 
+<HEAD> 
+ 
+<TITLE>Mood Changer</TITLE> 
+ 
+<SCRIPT> 
+
+function Mood(data) {
+	var tmp = jQuery.parseJSON(data);
+	this.data = data;
+	this.positive = tmp.positive;
+	this.negative = tmp.negative;
+	this.getMood = function() {
+		if (this.positive > this.negative && (this.positive - this.negative > 5)) //smiling face
+		{
+			return "happy";
+		}
+		else if (this.negative > this.positive && (this.negative  - this.positive > 5)) //sad face
+		{
+			return "sad";
+		}
+		else //neutral face
+		{
+			return "neutral";
+		}
+	};
+	this.getData = function() {
+		return data;
+	};
+
+};
+
+function generate() {
+	var positive = Math.floor((Math.random()*100)+1); // Generate random number 1-100
+	var negative = Math.floor((Math.random()*100)+1);
+	return ("{\"positive\":"+positive+",\"negative\":"+negative+"}");
+}
+
+</SCRIPT>
+
+</HEAD>
+<SCRIPT src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></SCRIPT>
+<BODY>
+	<FORM>
+			<input type=button id="generate" value="Generate mood">
+	</FORM>
+	<SCRIPT>
+	$(document).ready(function() {
+		var i = setInterval(function() {
+			$("#generate").click();
+		}, 5000);
+		var event = setInterval($("#generate").click(), 10000);
+		$("#generate").click(function() {
+			var tmp = new Mood(generate());
+			$('#main').html(tmp.getData());
+			$('#mood').html("<img src=\"mood_"+tmp.getMood()+".png\"></img>");
+		
+		});
+	});
+	</SCRIPT>
+	<div id="mood">Image goes here</div>
+	<div id="main">Test data goes here</div>
+	
+	
+</BODY>
+
+
+
+
+</HTML>
